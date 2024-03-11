@@ -1,13 +1,13 @@
-# sun-tool
+# Awesome-tool
 
-
-## Login npm
+## NPM Guideline
+### Login npm
 
 ```
 npm login
 ```
 
-## Publish package to npm
+### Publish package to npm
 
 - Change version in package.json
 - Run command
@@ -16,10 +16,10 @@ npm login
 npm publish
 ```
 
-## Install package
+### Install package
 
 ```
-npm i -g sun-tool
+npm i -g awesome-tool
 ```
 
 
