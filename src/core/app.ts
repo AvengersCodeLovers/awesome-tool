@@ -33,6 +33,7 @@ function processing(moduleName: string) {
 export const bootstrap = async () => {
   await sayHello(() => {
     const args = process.argv;
+    console.log(args);
     const { isValid, moduleName } = route(args);
 
     if (isValid) {
