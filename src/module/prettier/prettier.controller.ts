@@ -1,17 +1,8 @@
-import { Command } from "commander";
 import { BaseController, StepResult, execPromise } from "../../core";
 import { ReportLevel, printReport } from "../../core/common/log";
 
 export class PrettierController extends BaseController {
   public async run(): Promise<StepResult> {
-    const program = new Command();
-    program.option("-f, --fix", "prettier fix");
-    program.parse(process.argv);
-
-    // E.g: Get options from command line
-    // const options = program.opts();
-    // console.log(options);
-
     const { isInstalled } = await this.checkIfPrettierInstalled();
     if (isInstalled) {
       const { hasError } = await this.checkPrettier();
@@ -22,6 +13,7 @@ export class PrettierController extends BaseController {
         };
       }
     }
+
     return {
       isSuccess: true,
     };

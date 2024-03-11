@@ -3,43 +3,49 @@ import { sayHello } from "./common/hello";
 import { LogType, log } from "./common/log";
 import { route } from "./common/route";
 
-const loadModule = () => {
-  const load = [PrettierModule];
-  load.forEach((module) => {
-    log(`Module ${(module as any).moduleName} loaded`);
-  });
-  return load;
-};
-
-const getModule = (moduleName: string) => {
-  const modules = loadModule();
-  return modules.filter(
-    (module) => (module as any).moduleName === moduleName
-  )[0];
-};
+export const allModules = [PrettierModule];
 
 function processing(moduleName: string) {
-  const module = getModule(moduleName);
+  log(`🚀 Checking "${moduleName}" ...`);
+  const module = allModules.find(
+    (module) => (module as any).moduleName === moduleName
+  );
   if (module) {
-    log(`Processing module "${moduleName}"`);
     const m = new module();
     (m as any) // https://github.com/Microsoft/TypeScript/issues/4881
       .run();
-  } else {
-    log(`⚠️ Module "${moduleName}" not found`, LogType.WARN);
   }
 }
 
+const loadModule = () => {
+  const allModuleNames = allModules.map((module) => (module as any).moduleName);
+
+  let targetModuleNames: string[] = [];
+  const { modules } = route();
+  if (modules.length === 0) {
+    targetModuleNames = allModuleNames;
+  } else {
+    targetModuleNames = modules.filter((module) =>
+      allModuleNames.includes(module)
+    );
+
+    const notFoundModules = modules.filter(
+      (module) => !allModuleNames.includes(module)
+    );
+    if (notFoundModules.length > 0) {
+      log(`⚠️ Modules "${notFoundModules.join(", ")}" not found`, LogType.WARN);
+    }
+  }
+
+  targetModuleNames = Array.from(new Set(targetModuleNames));
+
+  for (const moduleName of targetModuleNames) {
+    processing(moduleName);
+  }
+};
+
 export const bootstrap = async () => {
   await sayHello(() => {
-    const args = process.argv;
-    console.log(args);
-    const { isValid, moduleName } = route(args);
-
-    if (isValid) {
-      processing(moduleName);
-    } else {
-      console.warn("⚠️ Invalid command. Module not found.");
-    }
+    loadModule();
   });
 };

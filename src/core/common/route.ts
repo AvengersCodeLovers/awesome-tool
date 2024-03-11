@@ -1,23 +1,21 @@
-const route = (
-  processArgv: string[]
-): {
-  isValid: boolean;
-  moduleName: string;
-} => {
-  const args = Object.values(processArgv);
-  let moduleName = "";
+import { Command } from "commander";
 
-  // get first occur of index.js in args
-  for (let i = 0; i < args.length; i++) {
-    if (args[i].includes("index.js")) {
-      moduleName = args[i + 1];
-      break;
-    }
+const route = (): {
+  modules: string[];
+} => {
+  const modules: string[] = [];
+
+  const program = new Command();
+  program.option("-p, --prettier", "Check prettier");
+  program.parse(process.argv);
+
+  const options = program.opts();
+  if (options.prettier) {
+    modules.push("prettier");
   }
 
   return {
-    isValid: moduleName !== "",
-    moduleName: moduleName,
+    modules: [],
   };
 };
 
