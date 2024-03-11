@@ -84,10 +84,12 @@ export class PrettierController extends BaseController {
       };
     } else {
       const files = stdout.split("\n").filter((file) => file);
+      const txt =
+        files.length + (files.length === 1 ? " file is" : " files are");
       printReport({
         level: ReportLevel.WARN,
         message:
-          "⚠️  The result of prettier check is bad (some files are not formatted):\n" +
+          `⚠️  The result of prettier check is bad (${txt} not formatted):\n` +
           files.map((file) => `- ${file}`).join("\n"),
         suggestions: [
           "Please run `prettier --write .` to format the code",

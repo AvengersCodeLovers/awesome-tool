@@ -8,7 +8,7 @@ const sayHello = async (callback: () => any) => {
       return;
     }
     console.log(chalk.green(data));
-    console.log(`Developed by ${common.author} with ❤️`);
+    console.log(`      Developed by ${common.author} with ❤️\n`);
     callback();
   });
 };
