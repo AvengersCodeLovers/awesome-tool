@@ -1,5 +1,5 @@
 import figlet from "figlet";
-import { common } from "../config";
+import { common } from "../../config";
 import chalk from "chalk";
 
 const sayHello = async (callback: () => any) => {
